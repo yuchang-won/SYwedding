@@ -43,6 +43,14 @@ body{margin:0;background:radial-gradient(120% 70% at 50% 0%,#17543f 0%,#0f3d30 4
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px;border-top:1px dashed var(--line);padding-top:16px}
 .grid small{display:block;font-size:11px;color:var(--sub)}
 .grid strong{font-size:15px;white-space:nowrap}
+.key{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1.35fr;margin-top:4px;border-radius:12px;background:var(--field);color:#f3e7cc;box-shadow:inset 0 0 0 1px rgba(194,163,107,.6);overflow:hidden}
+.key>div{padding:12px 8px 11px 12px;position:relative}
+.key>div+div::before{content:"";position:absolute;left:0;top:12px;bottom:12px;border-left:1px dashed rgba(194,163,107,.55)}
+.key small{color:var(--gold);font-size:10.5px;letter-spacing:.02em;white-space:nowrap}
+.key strong{display:block;font:900 30px/1 "Big Shoulders Display",sans-serif;color:#fbf3dc;margin:5px 0 4px}
+.key strong.gate{font:700 17px/1.15 "IBM Plex Sans KR";white-space:normal;word-break:keep-all;margin:7px 0 5px;color:var(--gold)}
+.key em{display:block;font-style:normal;font-size:11px;color:rgba(243,231,204,.72);white-space:nowrap}
+@media(max-width:360px){.key>div{padding-left:9px}.key small{font-size:9.5px}.key strong{font-size:25px}.key strong.gate{font-size:14px}}
 .pax{grid-column:1/-1}
 .pax .pname{display:block;font:700 22px/1.3 "IBM Plex Sans KR";color:var(--ink);border-bottom:2px solid var(--line);padding:6px 0 8px;overflow-wrap:anywhere}
 .rname{width:100%;min-height:44px;font:16px "IBM Plex Sans KR";border-radius:10px;border:1.5px solid var(--line);background:var(--ticket);color:var(--ink);padding:0 12px;margin-bottom:12px}
@@ -147,7 +155,7 @@ body.boarded .ticket{animation:tin 1s cubic-bezier(.2,.8,.2,1)}
 .ticket::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px 4px rgba(194,163,107,.6);opacity:0;pointer-events:none}
 body.boarded .ticket::after{animation:scan 1.6s ease-in-out .9s 1}
 @keyframes scan{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
-.okstamp{position:absolute;left:50%;top:44px;z-index:3;padding:6px 12px;border:2.5px solid var(--sky);color:var(--sky);font:900 20px "Big Shoulders Display";letter-spacing:.06em;border-radius:6px;transform:translateX(-50%) rotate(-12deg) scale(2);opacity:0;pointer-events:none;background:rgba(251,248,241,.85)}
+.okstamp{position:absolute;left:50%;top:44px;white-space:nowrap;z-index:3;padding:6px 12px;border:2.5px solid var(--sky);color:var(--sky);font:900 20px "Big Shoulders Display";letter-spacing:.06em;border-radius:6px;transform:translateX(-50%) rotate(-12deg) scale(2);opacity:0;pointer-events:none;background:rgba(251,248,241,.85)}
 body.boarded .okstamp{animation:stamp .35s ease-out 2.5s forwards}
 @keyframes stamp{to{opacity:.9;transform:translateX(-50%) rotate(-12deg) scale(1)}}
 @media(prefers-reduced-motion:reduce){.track,.bgp,.reveal>*{transition:none!important}.hint{animation:none}body.boarded .ticket,body.boarded .ticket::after{animation:none}body.boarded .okstamp{animation:none;opacity:.9;transform:translateX(-50%) rotate(-12deg)}}
@@ -183,11 +191,13 @@ try{window.TO=(new URLSearchParams(location.search).get('to')||'').replace(/[<>]
       <div class="grid">
         <div class="pax"><small>탑승객 PASSENGER</small><strong class="pname" id="name">소중한 하객님</strong></div>
         <div><small>편명 FLIGHT</small><strong>YS0314</strong></div>
-        <div><small>날짜 DATE</small><strong>27.03.14 일</strong></div>
         <div><small>좌석 SEAT</small><strong>자유석</strong></div>
         <div><small>탑승 BOARDING</small><strong>14:00</strong></div>
-        <div><small>출발 DEPART</small><strong>14:30</strong></div>
-        <div><small>게이트 GATE</small><strong>루이비스안양</strong></div>
+        <div class="key">
+          <div><small>날짜 DATE</small><strong>03.14</strong><em>2027 · 일요일</em></div>
+          <div><small>출발 DEPART</small><strong>14:30</strong><em>오후 2시 30분</em></div>
+          <div><small>게이트 GATE</small><strong class="gate">루이비스안양</strong><em>안양역 직결</em></div>
+        </div>
       </div>
     </div>
     <div class="perf"></div>
@@ -314,14 +324,14 @@ const SEQ=[
   {t:'ann',ph:0,ic:'bell',lbl:'CHECK-IN',h:'지금부터\nFlight YS0314\n탑승 수속을 시작하겠습니다',p:TO?`${TO}, 환영합니다\n기장 유창 · 부기장 수지`:'기장 유창 · 부기장 수지'},
   {t:'photo',ph:0,lbl:'DEPARTURE',h:'2027.03.14',p:'일요일 오후 2시 30분\n저희 두 사람의 첫 비행이 이륙합니다'},
   {t:'ann',ph:1,ic:'bag',lbl:'SECURITY CHECK',h:'보안 검색대입니다\n소지품 검사를\n진행하겠습니다',p:'설렘 1개, 축하하는 마음 1개 확인…\n통과입니다 ✓'},
-  {t:'photo',ph:1,lbl:'GATE',h:'루이비스컨벤션\n안양점',ko:true,p:'안양역 2층 맞이방과 바로 연결돼요\n엔터식스 안양점 8·9층'},
+  {t:'photo',ph:1,lbl:'GATE',h:'루이비스안양',ko:true,p:'안양역 2층 맞이방과 바로 연결돼요\n엔터식스 안양점 8·9층'},
   {t:'ann',ph:2,ic:'scan',lbl:'FINAL CHECK',h:'마지막으로\n소지품을 한 번 더\n확인하겠습니다',p:'환한 웃음, 힘찬 박수, 따뜻한 축복\n모두 챙기셨나요?'},
   {t:'photo',ph:2,lbl:'THANK YOU',h:'저희의 첫 비행에\n탑승해 주셔서 감사합니다',ko:true,p:'난기류 없는 하늘은 없겠지만\n서로의 안전벨트가 되어\n평생 나란히 날아가겠습니다.\n그 첫 이륙을 곁에서 지켜봐 주세요.'},
   {t:'ann',ph:2,ic:'ticket',lbl:'BOARDING',h:TO?`${TO}의\n티켓 검사를 하겠습니다`:'티켓 검사를 하겠습니다',p:'탑승권을 준비해 주세요',last:true}
 ];
 const $=id=>document.getElementById(id);
 const intro=$('intro'),track=$('track'),dots=$('idots');
-const bgOf=i=>{const p=PH[i];return p.img?`<img src="${p.img}" alt="">`:`<span>사진 ${i+1} 자리</span>`};
+const bgOf=i=>{const p=PH[i];return p.img?`<img src="${p.img}" alt="" onerror="this.remove()">`:`<span>사진 ${i+1} 자리</span>`};
 track.innerHTML=SEQ.map(s=>`<section class="sl ${s.t}"><div class="bgp" style="background:${PH[s.ph].bg}">${bgOf(s.ph)}</div><div class="sl-in"><div class="reveal">${s.t==='ann'?`<div class="ic">${IC[s.ic]}</div>`:''}<p class="lbl">${s.lbl}</p><h2 class="${s.ko?'ko':''}"></h2><p class="tx"></p>${s.last?'<button class="board" id="boardBtn">탑승권 보여주기 ›</button>':''}</div></div></section>`).join('');
 [...track.children].forEach((el,i)=>{el.querySelector('h2').textContent=SEQ[i].h;el.querySelector('.tx').textContent=SEQ[i].p});
 dots.innerHTML=SEQ.map(()=>'<i></i>').join('');

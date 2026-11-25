@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flight YS0314 탑승권</title>
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0c3428">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flight YS0314 · 유창 ♥ 수지 결혼합니다">
+<meta property="og:description" content="2027년 3월 14일 일요일 오후 2시 30분 · 루이비스컨벤션 안양점">
+<meta property="og:image" content="https://아이디.github.io/저장소이름/img/og.jpg">
+<meta property="og:url" content="https://아이디.github.io/저장소이름/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: 설레면서도 격조 있는, 프라이빗 항공권
+IDEA: 결혼식 = 두 사람의 첫 비행. 청첩장 전체가 항공 탑승권과 운항 안내문
+PICTURE: 절취선이 있는 탑승권. 하객 이름이 티켓에 찍히고, 뜯으면 체크인(RSVP)이 열림
+COLOUR and TYPE: 딥 에메랄드 그린 바탕(부쉐론 그린), 아이보리 티켓, 샴페인 골드 포인트 / Big Shoulders Display(공항 코드) + IBM Plex Sans KR
+LAYOUT: 480px 단일 컬럼. 탑승권 → 운항 일정 → 승무원 → 창가 풍경 → 공항 오는 길 → 면세점(계좌)
+*/
+:root{color-scheme:light;
+--field:#0f3d30;--ticket:#fbf8f1;--gold:#c2a36b;
+--ink:#13261f;--sub:#7b8079;
+--sky:#a8864c;--line:#e7dfcf}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:radial-gradient(120% 70% at 50% 0%,#17543f 0%,#0f3d30 45%,#0a2c22 100%) fixed var(--field);color:var(--ink);font:15px/1.65 "IBM Plex Sans KR",sans-serif;overflow-x:clip}
+.wrap{max-width:480px;margin:0 auto;padding:28px 18px 60px}
+.big{font-family:"Big Shoulders Display",sans-serif;font-weight:900;letter-spacing:.01em;line-height:.9}
+.top{color:var(--gold);display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:18px}
+.top b{font:900 22px "Big Shoulders Display"}
+/* 티켓 */
+.ticket{background:var(--ticket);border-radius:18px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.35),inset 0 0 0 1px rgba(194,163,107,.5)}
+.main{padding:24px 22px 26px}
+.route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:6px 0 18px}
+.route .big{font-size:clamp(56px,17vw,76px)}
+.route p{margin:2px 0 0;font-size:13px;color:var(--sub)}
+.route .r{text-align:right}
+.plane{width:52px;color:var(--sky)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px;border-top:1px dashed var(--line);padding-top:16px}
+.grid small{display:block;font-size:11px;color:var(--sub)}
+.grid strong{font-size:15px;white-space:nowrap}
+.pax{grid-column:1/-1}
+.pax input{width:100%;font:700 20px "IBM Plex Sans KR";color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--line);padding:4px 0;min-height:44px}
+.pax input:focus{outline:none;border-color:var(--sky)}
+.perf{position:relative;height:0;border-top:2px dashed var(--line);margin:0 18px}
+.perf::before,.perf::after{content:"";position:absolute;top:-15px;width:28px;height:28px;border-radius:50%;background:var(--field)}
+.perf::before{left:-32px}.perf::after{right:-32px}
+.stub{padding:18px 22px 22px;display:flex;align-items:center;gap:16px;transform-origin:top left;transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .7s}
+.stub svg{height:52px;flex:1}
+.torn .stub{transform:translateY(40px) rotate(-8deg);opacity:0;pointer-events:none}
+.btn{min-height:44px;padding:0 18px;border-radius:12px;border:0;background:var(--field);color:#f3e7cc;font:500 14px "IBM Plex Sans KR";cursor:pointer;flex:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+/* 체크인 */
+.checkin{display:none;padding:0 22px 24px}
+.torn .checkin{display:block;animation:up .5s ease}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.checkin h3{margin:18px 0 12px;font-size:17px}
+.opt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.opt label{flex:1 1 30%}
+.opt input{position:absolute;opacity:0}
+.opt span{display:grid;place-items:center;min-height:44px;border:1.5px solid var(--line);border-radius:10px;font-size:14px;cursor:pointer}
+.opt input:checked+span{background:var(--sky);border-color:var(--sky);color:#fff}
+.opt input:focus-visible+span{outline:3px solid var(--sky);outline-offset:2px}
+select{width:100%;min-height:44px;font:16px "IBM Plex Sans KR";border-radius:10px;border:1.5px solid var(--line);background:var(--ticket);color:var(--ink);padding:0 10px;margin-bottom:12px}
+.result{background:#eef6fc;border-radius:10px;padding:12px 14px;font-size:14px;margin:6px 0 12px;white-space:pre-line}
+/* 섹션 */
+.card{background:var(--ticket);border-radius:18px;padding:24px 22px;margin-top:16px;box-shadow:inset 0 0 0 1px rgba(194,163,107,.45)}
+.card h2{color:var(--field)}
+.card h2{font:900 30px/1 "Big Shoulders Display";margin:0 0 4px}
+.card .k{color:var(--sub);font-size:13px;margin:0 0 18px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.tl time{font:700 24px/1 "Big Shoulders Display";color:var(--sky);white-space:nowrap}
+.tl b{display:block}.tl span{color:var(--sub);font-size:13px}
+.crew{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.crew div{border:1.5px solid var(--line);border-radius:12px;padding:14px}
+.crew small{color:var(--sky);font-weight:700;font-size:12px}
+.crew b{display:block;font-size:18px;margin:2px 0}
+.crew span{font-size:12px;color:var(--sub)}
+.win{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px}
+.win::-webkit-scrollbar{display:none}
+.win figure{flex:0 0 58%;scroll-snap-align:center;margin:0;aspect-ratio:3/4;border-radius:44% / 30%;border:10px solid #efe6d2;display:grid;place-items:center;color:#fff;font-size:13px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+.nav{display:flex;gap:8px;margin-top:14px}
+dl{margin:0}dt{font-weight:700;margin-top:14px;font-size:14px}dd{margin:2px 0 0;color:var(--sub);font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.row p{margin:0;line-height:1.45}.row span{display:block;font-size:12px;color:var(--sub)}
+.row .btn{min-height:36px;font-size:12px;padding:0 14px}
+summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer}
+.note{color:rgba(243,231,204,.75);font-size:12px;text-align:center;margin-top:24px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:var(--field);color:#f3e7cc;z-index:20;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:15}
+@media(prefers-reduced-motion:reduce){#sky{display:none}}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){.stub,.torn .checkin{transition:none;animation:none}}
+/* ── 탑승 수속 인트로 ── */
+body.lock{overflow:hidden}
+.intro{position:fixed;inset:0;z-index:30;background:#0a2c22;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:opacity .8s,visibility .8s}
+.intro.gone{opacity:0;visibility:hidden}
+.track{display:flex;height:100%;transition:transform .7s cubic-bezier(.65,0,.25,1);will-change:transform}
+.sl{flex:0 0 100%;height:100%;position:relative;overflow:hidden;display:flex;justify-content:center}
+.sl-in{width:100%;max-width:480px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 28px 120px;color:#f3e7cc}
+.bgp{position:absolute;inset:-30px;background-size:cover;background-position:center;display:grid;place-items:center;color:rgba(243,231,204,.5);font-size:13px;transition:filter 1.4s ease,transform 1.4s ease}
+.bgp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* 사진 장면: 흐릿 → 선명 */
+.photo .bgp{filter:blur(18px) brightness(.8);transform:scale(1.08)}
+.photo.on .bgp{filter:none;transform:scale(1)}
+.photo .sl-in::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(8,36,27,.88));z-index:0}
+/* 안내 방송 장면: 선명 → 흐릿 + 문구 */
+.ann .bgp{filter:none}
+.ann.on .bgp{filter:blur(16px) brightness(.55) saturate(.8);transform:scale(1.1)}
+.ann .sl-in{justify-content:center;text-align:center;padding:0 30px}
+.sl-in>*{position:relative;z-index:1}
+.ann .ic{width:64px;height:64px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--gold);color:var(--gold)}
+.ann .ic svg{width:30px}
+.lbl{font:700 13px/1 "Big Shoulders Display",sans-serif;letter-spacing:.18em;color:var(--gold);margin:0 0 12px}
+.ann h2{font:700 24px/1.45 "IBM Plex Sans KR";margin:0;text-wrap:balance;white-space:pre-line}
+.ann p{margin:16px 0 0;font-size:15px;line-height:1.7;color:rgba(243,231,204,.85);white-space:pre-line}
+.photo h2{white-space:pre-line;font:900 clamp(44px,13vw,60px)/.95 "Big Shoulders Display",sans-serif;margin:0 0 12px;letter-spacing:.01em}
+.photo h2.ko{font:700 25px/1.4 "IBM Plex Sans KR";letter-spacing:0}
+.photo p{margin:0;font-size:15px;line-height:1.75;white-space:pre-line;color:rgba(243,231,204,.92)}
+.reveal>*{opacity:0;transform:translateY(14px);transition:opacity .8s,transform .8s}
+.sl.on .reveal>*{opacity:1;transform:none}
+.sl.on .reveal>*:nth-child(1){transition-delay:.7s}.sl.on .reveal>*:nth-child(2){transition-delay:1s}
+.sl.on .reveal>*:nth-child(3){transition-delay:1.4s}.sl.on .reveal>*:nth-child(4){transition-delay:2.1s}
+.ihud{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:center;pointer-events:none}
+.ihud div{width:100%;max-width:480px;padding:18px 18px 0;display:flex;justify-content:space-between;align-items:center;color:var(--gold);font:900 18px "Big Shoulders Display"}
+.ihud button{pointer-events:auto;min-height:40px;padding:0 14px;border-radius:20px;border:1px solid rgba(194,163,107,.6);background:rgba(10,44,34,.35);color:#f3e7cc;font:13px "IBM Plex Sans KR";cursor:pointer}
+.dots{position:absolute;left:0;right:0;bottom:44px;z-index:2;display:flex;justify-content:center;gap:6px}
+.dots i{width:6px;height:6px;border-radius:3px;background:rgba(243,231,204,.35);transition:.3s}
+.dots i.on{width:22px;background:var(--gold)}
+.hint{position:absolute;left:0;right:0;bottom:66px;z-index:2;text-align:center;font-size:12px;color:rgba(243,231,204,.7);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(8px)}}
+.inav{position:absolute;top:50%;z-index:2;width:44px;height:44px;margin-top:-22px;border-radius:50%;border:1px solid rgba(194,163,107,.5);background:rgba(10,44,34,.35);color:#f3e7cc;font-size:20px;cursor:pointer;display:none}
+@media(hover:hover){.inav{display:block}}
+.inav.p{left:14px}.inav.n{right:14px}
+.board{display:inline-flex;margin:26px auto 0;min-height:48px;padding:0 24px;border-radius:24px;border:0;background:var(--gold);color:#0a2c22;font:700 15px "IBM Plex Sans KR";align-items:center;cursor:pointer}
+.again2{position:fixed;right:14px;bottom:16px;z-index:16;min-height:42px;padding:0 16px;border-radius:21px;border:1px solid rgba(194,163,107,.6);background:#0f3d30;color:#f3e7cc;font:13px "IBM Plex Sans KR";cursor:pointer}
+/* 티켓 등장 + 검사 스캔 */
+body.boarded .ticket{animation:tin 1s cubic-bezier(.2,.8,.2,1)}
+@keyframes tin{from{opacity:0;transform:translateY(60px) rotate(-2deg)}}
+.ticket::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px 4px rgba(194,163,107,.6);opacity:0;pointer-events:none}
+body.boarded .ticket::after{animation:scan 1.6s ease-in-out .9s 1}
+@keyframes scan{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.okstamp{position:absolute;left:50%;top:44px;z-index:3;padding:6px 12px;border:2.5px solid var(--sky);color:var(--sky);font:900 20px "Big Shoulders Display";letter-spacing:.06em;border-radius:6px;transform:translateX(-50%) rotate(-12deg) scale(2);opacity:0;pointer-events:none;background:rgba(251,248,241,.85)}
+body.boarded .okstamp{animation:stamp .35s ease-out 2.5s forwards}
+@keyframes stamp{to{opacity:.9;transform:translateX(-50%) rotate(-12deg) scale(1)}}
+@media(prefers-reduced-motion:reduce){.track,.bgp,.reveal>*{transition:none!important}.hint{animation:none}body.boarded .ticket,body.boarded .ticket::after{animation:none}body.boarded .okstamp{animation:none;opacity:.9;transform:translateX(-50%) rotate(-12deg)}}
+</style>
+</head>
+<body class="lock">
+<!-- ── 탑승 수속 인트로 (옆으로 넘기는 슬라이드) ── -->
+<div class="intro" id="intro" role="dialog" aria-label="탑승 수속 인트로">
+  <div class="track" id="track"></div>
+  <div class="ihud"><div><span>YS AIR</span><button id="iskip">건너뛰기</button></div></div>
+  <button class="inav p" id="iprev" aria-label="이전">‹</button>
+  <button class="inav n" id="inext" aria-label="다음">›</button>
+  <p class="hint" id="ihint">옆으로 넘겨 주세요 →</p>
+  <div class="dots" id="idots"></div>
+</div>
+<button class="again2" id="again2" hidden>탑승 수속 다시 보기</button>
+<div class="wrap">
+  <div class="top"><b>YS AIR</b><span>BOARDING PASS · 탑승권</span></div>
+
+  <article class="ticket" id="ticket">
+    <span class="okstamp" aria-hidden="true">CHECKED ✓</span>
+    <div class="main">
+      <div class="route">
+        <div><div class="big">YC</div><p>유창 출발</p></div>
+        <svg class="plane" viewBox="0 0 48 24" aria-hidden="true"><path d="M2 12h44M30 3l10 9-10 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="12" r="0"/></svg>
+        <div class="r"><div class="big">SJ</div><p>수지 도착</p></div>
+      </div>
+      <div class="grid">
+        <div class="pax"><small>탑승객 PASSENGER — 이름을 입력해 보세요</small><input id="name" value="소중한 하객님" maxlength="16" aria-label="탑승객 이름"></div>
+        <div><small>편명 FLIGHT</small><strong>YS0314</strong></div>
+        <div><small>날짜 DATE</small><strong>27.03.14 일</strong></div>
+        <div><small>좌석 SEAT</small><strong>자유석</strong></div>
+        <div><small>탑승 BOARDING</small><strong>14:00</strong></div>
+        <div><small>출발 DEPART</small><strong>14:30</strong></div>
+        <div><small>게이트 GATE</small><strong>루이비스</strong></div>
+      </div>
+    </div>
+    <div class="perf"></div>
+    <div class="stub">
+      <svg id="barcode" viewBox="0 0 200 52" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <button class="btn" id="tear">뜯고 체크인 ›</button>
+    </div>
+    <div class="checkin" aria-live="polite">
+      <h3>✓ 체크인 — 참석 여부를 알려주세요</h3>
+      <div class="opt" role="radiogroup" aria-label="참석 여부">
+        <label><input type="radio" name="go" value="참석" checked><span>탑승할게요</span></label>
+        <label><input type="radio" name="go" value="불참"><span>다음 비행에</span></label>
+      </div>
+      <select id="pax" aria-label="동반 인원"><option>본인 1명</option><option>2명</option><option>3명</option><option>4명 이상</option></select>
+      <div class="opt" role="radiogroup" aria-label="식사">
+        <label><input type="radio" name="meal" value="식사함" checked><span>기내식 O</span></label>
+        <label><input type="radio" name="meal" value="식사 안 함"><span>기내식 X</span></label>
+      </div>
+      <div class="result" id="result"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="copyRsvp">내용 복사해서 문자로 보내기</button>
+        <button class="btn ghost" id="retry">티켓 다시 붙이기</button>
+      </div>
+    </div>
+  </article>
+
+  <section class="card">
+    <h2>FLIGHT PLAN</h2><p class="k">운항 일정 · 2027년 3월 14일 일요일</p>
+    <ol class="tl" id="tl"></ol>
+  </section>
+
+  <section class="card">
+    <h2>CREW</h2><p class="k">이번 비행을 함께할 승무원을 소개합니다</p>
+    <div class="crew" id="crew"></div>
+  </section>
+
+  <section class="card">
+    <h2>WINDOW VIEW</h2><p class="k">창밖으로 보이는 우리의 순간들</p>
+    <div class="win" id="win" tabindex="0" aria-label="사진 갤러리"></div>
+    <div class="nav"><button class="btn ghost" id="prev">‹ 이전</button><button class="btn ghost" id="next">다음 ›</button></div>
+  </section>
+
+  <section class="card">
+    <h2>TO THE GATE</h2><p class="k">루이비스컨벤션 안양점 · 경기도 안양시 만안구 만안로 244, 엔터식스 안양점 8·9층</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-copy="경기도 안양시 만안구 만안로 244">주소 복사</button><a class="btn ghost" style="display:inline-flex;align-items:center;text-decoration:none" href="https://map.kakao.com/?q=%EB%A3%A8%EC%9D%B4%EB%B9%84%EC%8A%A4%EC%BB%A8%EB%B2%A4%EC%85%98%20%EC%95%88%EC%96%91%EC%A0%90" target="_blank" rel="noopener">카카오맵</a></div>
+    <dl><dt>지하철 노선</dt><dd>1호선 안양역 1번 출구 · 2층 맞이방과 바로 연결</dd><dt>버스 노선</dt><dd>안양역 앞 — 1, 6, 15-1, 52, 83, 333, 1303, 1650, 3330, 마을 1·2·3-1·9<br>안양역 건너편 — 1, 2, 6, 11, 12, 81, 83, 마을 2·9</dd><dt>주기장(주차)</dt><dd>엔터식스 건물 주차장 (무료 시간 확인 후 입력)</dd></dl>
+  </section>
+
+  <section class="card">
+    <h2>DUTY FREE</h2><p class="k">마음 전하실 곳 — 직접 탑승이 어려운 분들을 위해</p>
+    <div id="accs"></div>
+  </section>
+
+  <p class="note">혼주 성함·계좌는 예시입니다.</p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const toast=t=>{const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1600)};
+const copy=async t=>{try{await navigator.clipboard.writeText(t);toast('복사되었습니다')}catch(e){toast('복사가 막혀 있어요. 길게 눌러 복사해 주세요')}};
+
+// 바코드: 이름에 따라 모양이 바뀜
+const bars=s=>{let h=0,x=0,out='';for(const ch of s+'MS0417')h=(h*31+ch.charCodeAt(0))>>>0;
+  while(x<200){h=(h*1103515245+12345)>>>0;const w=1+(h%4);out+=`<rect x="${x}" width="${w}" height="52" fill="currentColor"/>`;x+=w+1+((h>>8)%3)}return out};
+const render=()=>{
+  $('barcode').innerHTML=bars($('name').value);
+  const n=$('name').value.trim()||'하객';
+  const go=document.querySelector('[name=go]:checked').value,meal=document.querySelector('[name=meal]:checked').value;
+  $('result').textContent=`[유창♥수지 결혼식 참석 회신]\n이름: ${n}\n참석: ${go}${go==='참석'?` · ${$('pax').value} · ${meal}`:''}`;
+};
+$('name').addEventListener('input',render);
+document.querySelectorAll('[name=go],[name=meal]').forEach(r=>r.addEventListener('change',render));
+$('pax').addEventListener('change',render);
+render();
+
+$('tear').onclick=()=>$('ticket').classList.add('torn');
+$('retry').onclick=()=>$('ticket').classList.remove('torn');
+$('copyRsvp').onclick=()=>copy($('result').textContent);
+
+// 일정
+const plan=[['14:00','탑승 시작','하객 입장 · 포토부스 운영'],['14:30','이륙','예식 시작 · 혼인 서약'],['15:10','순항 고도 도달','사진 촬영'],['15:30','기내식 서비스','연회장 식사']];
+$('tl').innerHTML=plan.map(([t,a,b])=>`<li><time>${t}</time><div><b>${a}</b><span>${b}</span></div></li>`).join('');
+
+// 승무원
+const crew=[['CAPTAIN','유창','○○○ · ○○○의 아들'],['CO-PILOT','수지','○○○ · ○○○의 딸']];
+$('crew').innerHTML=crew.map(([r,n,d])=>`<div><small>${r}</small><b>${n}</b><span>${d}</span></div>`).join('');
+
+// 창가 갤러리
+const sky=['#2f7a5f,#0f3d30','#d9c59a,#a8864c','#3f8a6d,#14503d','#e6d6b2,#b89a62','#25664f,#0a2c22'];
+$('win').innerHTML=sky.map((c,i)=>`<figure style="background:linear-gradient(170deg,${c})">사진 ${i+1}</figure>`).join('');
+const step=d=>$('win').scrollBy({left:d*($('win').firstElementChild.offsetWidth+14),behavior:'smooth'});
+$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
+$('win').addEventListener('keydown',e=>{if(e.key==='ArrowLeft')step(-1);if(e.key==='ArrowRight')step(1)});
+
+// 계좌
+const accs=[['신랑측',[['신랑 유창','예시은행 000-0000-0000'],['아버지 ○○○','예시은행 111-1111-1111']]],['신부측',[['신부 수지','예시은행 333-3333-3333'],['어머니 ○○○','예시은행 555-5555-5555']]]];
+$('accs').innerHTML=accs.map(([t,l])=>`<details><summary>${t} 계좌 보기</summary>${l.map(([n,no])=>`<div class="row"><p>${esc(no)}<span>${esc(n)}</span></p><button class="btn" data-copy="${esc(no)}">복사</button></div>`).join('')}</details>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(b)copy(b.dataset.copy)});
+}
+
+
+// ── 탑승 수속 인트로
+// 사진: img에 'img/01.webp' 처럼 경로를 넣으면 그라데이션 대신 사진이 나옵니다
+{
+const PH=[
+  {img:'',bg:'linear-gradient(165deg,#2f7a5f,#0f3d30 60%,#0a2c22)'},
+  {img:'',bg:'linear-gradient(165deg,#d9c59a,#8a6d3b 60%,#2c2412)'},
+  {img:'',bg:'linear-gradient(165deg,#3f8a6d,#14503d 60%,#0a2c22)'}
+];
+const IC={
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+  bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5h6v3M4 13h16"/></svg>',
+  scan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3M4 12h16"/></svg>',
+  ticket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8a2 2 0 0 0 0 4v0a2 2 0 0 0 0 4v2h18v-2a2 2 0 0 1 0-4 2 2 0 0 1 0-4V6H3z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>'
+};
+// t: 'ann'(블러 안내방송) | 'photo'(사진)   ph: 배경으로 쓸 사진 번호
+const SEQ=[
+  {t:'ann',ph:0,ic:'bell',lbl:'CHECK-IN',h:'지금부터\nFlight YS0314\n탑승 수속을 시작하겠습니다',p:'기장 유창 · 부기장 수지'},
+  {t:'photo',ph:0,lbl:'DEPARTURE',h:'2027.03.14',p:'일요일 오후 2시 30분\n저희 두 사람의 첫 비행이 이륙합니다'},
+  {t:'ann',ph:1,ic:'bag',lbl:'SECURITY CHECK',h:'보안 검색대입니다\n소지품 검사를\n진행하겠습니다',p:'설렘 1개, 축하하는 마음 1개 확인…\n통과입니다 ✓'},
+  {t:'photo',ph:1,lbl:'GATE',h:'루이비스컨벤션\n안양점',ko:true,p:'안양역 2층 맞이방과 바로 연결돼요\n엔터식스 안양점 8·9층'},
+  {t:'ann',ph:2,ic:'scan',lbl:'FINAL CHECK',h:'마지막으로\n소지품을 한 번 더\n확인하겠습니다',p:'환한 웃음, 힘찬 박수, 따뜻한 축복\n모두 챙기셨나요?'},
+  {t:'photo',ph:2,lbl:'THANK YOU',h:'저희의 첫 비행에\n탑승해 주셔서 감사합니다',ko:true,p:'난기류 없는 하늘은 없겠지만\n서로의 안전벨트가 되어\n평생 나란히 날아가겠습니다.\n그 첫 이륙을 곁에서 지켜봐 주세요.'},
+  {t:'ann',ph:2,ic:'ticket',lbl:'BOARDING',h:'티켓 검사를 하겠습니다',p:'탑승권을 준비해 주세요',last:true}
+];
+const $=id=>document.getElementById(id);
+const intro=$('intro'),track=$('track'),dots=$('idots');
+const bgOf=i=>{const p=PH[i];return p.img?`<img src="${p.img}" alt="">`:`<span>사진 ${i+1} 자리</span>`};
+track.innerHTML=SEQ.map(s=>`<section class="sl ${s.t}"><div class="bgp" style="background:${PH[s.ph].bg}">${bgOf(s.ph)}</div><div class="sl-in"><div class="reveal">${s.t==='ann'?`<div class="ic">${IC[s.ic]}</div>`:''}<p class="lbl">${s.lbl}</p><h2 class="${s.ko?'ko':''}"></h2><p class="tx"></p>${s.last?'<button class="board" id="boardBtn">탑승권 보여주기 ›</button>':''}</div></div></section>`).join('');
+[...track.children].forEach((el,i)=>{el.querySelector('h2').textContent=SEQ[i].h;el.querySelector('.tx').textContent=SEQ[i].p});
+dots.innerHTML=SEQ.map(()=>'<i></i>').join('');
+let cur=0,auto=null;
+const go=i=>{
+  cur=Math.max(0,Math.min(SEQ.length-1,i));
+  track.style.transform=`translateX(${-cur*100}%)`;
+  [...track.children].forEach((el,k)=>el.classList.toggle('on',k===cur));
+  [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===cur));
+  $('ihint').hidden=cur>0;$('iprev').style.visibility=cur?'visible':'hidden';
+  clearTimeout(auto);if(SEQ[cur].last)auto=setTimeout(board,3200);
+};
+const board=()=>{
+  clearTimeout(auto);intro.classList.add('gone');document.body.classList.remove('lock');
+  document.body.classList.remove('boarded');void document.body.offsetWidth;document.body.classList.add('boarded');
+  $('again2').hidden=false;window.scrollTo(0,0);
+};
+$('again2').onclick=()=>{intro.classList.remove('gone');document.body.classList.add('lock');$('again2').hidden=true;go(0)};
+$('iskip').onclick=board;
+track.addEventListener('click',e=>{if(e.target.closest('#boardBtn'))board()});
+$('inext').onclick=()=>cur<SEQ.length-1?go(cur+1):board();
+$('iprev').onclick=()=>go(cur-1);
+document.addEventListener('keydown',e=>{if(intro.classList.contains('gone'))return;if(e.key==='ArrowRight')$('inext').click();if(e.key==='ArrowLeft')go(cur-1);if(e.key==='Escape')board()});
+// 스와이프
+let sx=null,sy=0,dx=0;
+intro.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;sx=e.clientX;sy=e.clientY;dx=0;track.style.transition='none'});
+intro.addEventListener('pointermove',e=>{if(sx===null)return;dx=e.clientX-sx;if(Math.abs(dx)>Math.abs(e.clientY-sy))track.style.transform=`translateX(calc(${-cur*100}% + ${dx*.9}px))`});
+const end=()=>{if(sx===null)return;track.style.transition='';sx=null;
+  if(dx<-50){cur<SEQ.length-1?go(cur+1):board()}else if(dx>50)go(cur-1);else go(cur)};
+intro.addEventListener('pointerup',end);intro.addEventListener('pointercancel',end);intro.addEventListener('pointerleave',end);
+requestAnimationFrame(()=>go(0));
+}
+
+// ── 뽈뽈뽈 돌아다니는 작은 비행기
+{
+const cv=document.createElement('canvas');cv.id='sky';cv.setAttribute('aria-hidden','true');document.body.append(cv);
+const ctx=cv.getContext('2d');
+let W=0,H=0,dpr=1;
+const fit=()=>{dpr=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr};
+fit();addEventListener('resize',fit);
+const P={x:-30,y:H*0.25,a:0,v:70};          // 위치, 방향(rad), 속도(px/s)
+let tgt=null,loop=0,trail=[],last=performance.now(),puff=0;
+const pick=()=>{tgt={x:30+Math.random()*(W-60),y:40+Math.random()*(H-80)};if(Math.random()<.25)loop=Math.PI*2};
+pick();
+const plane=(x,y,a)=>{
+  ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.scale(1.35,1.35);
+  ctx.shadowColor='rgba(0,0,0,.35)';ctx.shadowBlur=6;ctx.shadowOffsetY=3;
+  ctx.fillStyle='#d6b97f';ctx.strokeStyle='#0f3d30';ctx.lineWidth=.9;
+  ctx.beginPath();                            // 주날개
+  ctx.moveTo(2,0);ctx.lineTo(-4,-13);ctx.lineTo(-8,-13);ctx.lineTo(-5,0);ctx.lineTo(-8,13);ctx.lineTo(-4,13);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.beginPath();                            // 꼬리날개
+  ctx.moveTo(-12,0);ctx.lineTo(-16,-6);ctx.lineTo(-18,-6);ctx.lineTo(-16,0);ctx.lineTo(-18,6);ctx.lineTo(-16,6);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.ellipse(-4,0,14,3.4,0,0,Math.PI*2);ctx.fill();ctx.stroke();   // 동체
+  ctx.shadowColor='transparent';ctx.fillStyle='#fbf8f1';
+  ctx.beginPath();ctx.arc(7,0,1.4,0,Math.PI*2);ctx.fill();                          // 조종석
+  ctx.restore();
+};
+const tick=now=>{
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(loop>0){const t=2.6*dt;P.a+=t;loop-=t}    // 가끔 한 바퀴 빙글
+  else{
+    const want=Math.atan2(tgt.y-P.y,tgt.x-P.x);
+    let d=want-P.a;d=Math.atan2(Math.sin(d),Math.cos(d));
+    P.a+=Math.max(-1.6*dt,Math.min(1.6*dt,d))+Math.sin(now/380)*0.9*dt;  // 살랑살랑
+    if(Math.hypot(tgt.x-P.x,tgt.y-P.y)<40)pick();
+  }
+  P.v=62+Math.sin(now/900)*14;
+  P.x+=Math.cos(P.a)*P.v*dt;P.y+=Math.sin(P.a)*P.v*dt;
+  if(P.x<-60||P.x>W+60||P.y<-60||P.y>H+60)pick();
+  puff+=dt;if(puff>.09){puff=0;trail.push({x:P.x-Math.cos(P.a)*16,y:P.y-Math.sin(P.a)*16,t:now})}
+  trail=trail.filter(p=>now-p.t<2600);
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  for(const p of trail){const k=1-(now-p.t)/2600;ctx.fillStyle=`rgba(194,163,107,${(k*.6).toFixed(3)})`;ctx.beginPath();ctx.arc(p.x,p.y,1.2+k*1.3,0,Math.PI*2);ctx.fill()}
+  plane(P.x,P.y,P.a);
+  requestAnimationFrame(tick);
+};
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>

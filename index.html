@@ -44,8 +44,9 @@ body{margin:0;background:radial-gradient(120% 70% at 50% 0%,#17543f 0%,#0f3d30 4
 .grid small{display:block;font-size:11px;color:var(--sub)}
 .grid strong{font-size:15px;white-space:nowrap}
 .pax{grid-column:1/-1}
-.pax input{width:100%;font:700 20px "IBM Plex Sans KR";color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--line);padding:4px 0;min-height:44px}
-.pax input:focus{outline:none;border-color:var(--sky)}
+.pax .pname{display:block;font:700 22px/1.3 "IBM Plex Sans KR";color:var(--ink);border-bottom:2px solid var(--line);padding:6px 0 8px;overflow-wrap:anywhere}
+.rname{width:100%;min-height:44px;font:16px "IBM Plex Sans KR";border-radius:10px;border:1.5px solid var(--line);background:var(--ticket);color:var(--ink);padding:0 12px;margin-bottom:12px}
+.rname:focus{outline:3px solid var(--sky);outline-offset:1px}
 .perf{position:relative;height:0;border-top:2px dashed var(--line);margin:0 18px}
 .perf::before,.perf::after{content:"";position:absolute;top:-15px;width:28px;height:28px;border-radius:50%;background:var(--field)}
 .perf::before{left:-32px}.perf::after{right:-32px}
@@ -151,6 +152,11 @@ body.boarded .okstamp{animation:stamp .35s ease-out 2.5s forwards}
 @keyframes stamp{to{opacity:.9;transform:translateX(-50%) rotate(-12deg) scale(1)}}
 @media(prefers-reduced-motion:reduce){.track,.bgp,.reveal>*{transition:none!important}.hint{animation:none}body.boarded .ticket,body.boarded .ticket::after{animation:none}body.boarded .okstamp{animation:none;opacity:.9;transform:translateX(-50%) rotate(-12deg)}}
 </style>
+<script>
+// 개인 초대: 링크 끝에 ?to=이름 (예: ?to=김민지님) — make.html 에서 만들어요
+window.TO='';
+try{window.TO=(new URLSearchParams(location.search).get('to')||'').replace(/[<>]/g,'').trim().slice(0,20)}catch(e){}
+</script>
 </head>
 <body class="lock">
 <!-- ── 탑승 수속 인트로 (옆으로 넘기는 슬라이드) ── -->
@@ -175,7 +181,7 @@ body.boarded .okstamp{animation:stamp .35s ease-out 2.5s forwards}
         <div class="r"><div class="big">SJ</div><p>수지 도착</p></div>
       </div>
       <div class="grid">
-        <div class="pax"><small>탑승객 PASSENGER — 이름을 입력해 보세요</small><input id="name" value="소중한 하객님" maxlength="16" aria-label="탑승객 이름"></div>
+        <div class="pax"><small>탑승객 PASSENGER</small><strong class="pname" id="name">소중한 하객님</strong></div>
         <div><small>편명 FLIGHT</small><strong>YS0314</strong></div>
         <div><small>날짜 DATE</small><strong>27.03.14 일</strong></div>
         <div><small>좌석 SEAT</small><strong>자유석</strong></div>
@@ -191,6 +197,7 @@ body.boarded .okstamp{animation:stamp .35s ease-out 2.5s forwards}
     </div>
     <div class="checkin" aria-live="polite">
       <h3>✓ 체크인 — 참석 여부를 알려주세요</h3>
+      <input class="rname" id="rname" maxlength="10" placeholder="성함을 적어 주세요" aria-label="회신할 성함" hidden>
       <div class="opt" role="radiogroup" aria-label="참석 여부">
         <label><input type="radio" name="go" value="참석" checked><span>탑승할게요</span></label>
         <label><input type="radio" name="go" value="불참"><span>다음 비행에</span></label>
@@ -250,12 +257,14 @@ const copy=async t=>{try{await navigator.clipboard.writeText(t);toast('복사되
 const bars=s=>{let h=0,x=0,out='';for(const ch of s+'MS0417')h=(h*31+ch.charCodeAt(0))>>>0;
   while(x<200){h=(h*1103515245+12345)>>>0;const w=1+(h%4);out+=`<rect x="${x}" width="${w}" height="52" fill="currentColor"/>`;x+=w+1+((h>>8)%3)}return out};
 const render=()=>{
-  $('barcode').innerHTML=bars($('name').value);
-  const n=$('name').value.trim()||'하객';
+  $('barcode').innerHTML=bars(TO||'guest');
+  const n=TO?TO.replace(/\s*님$/,''):($('rname').value.trim()||'(성함)');
   const go=document.querySelector('[name=go]:checked').value,meal=document.querySelector('[name=meal]:checked').value;
   $('result').textContent=`[유창♥수지 결혼식 참석 회신]\n이름: ${n}\n참석: ${go}${go==='참석'?` · ${$('pax').value} · ${meal}`:''}`;
 };
-$('name').addEventListener('input',render);
+$('name').textContent=TO||'소중한 하객님';
+$('rname').hidden=!!TO;$('rname').addEventListener('input',render);
+if(TO)document.title=`${TO}의 탑승권 · Flight YS0314`;
 document.querySelectorAll('[name=go],[name=meal]').forEach(r=>r.addEventListener('change',render));
 $('pax').addEventListener('change',render);
 render();
@@ -302,13 +311,13 @@ const IC={
 };
 // t: 'ann'(블러 안내방송) | 'photo'(사진)   ph: 배경으로 쓸 사진 번호
 const SEQ=[
-  {t:'ann',ph:0,ic:'bell',lbl:'CHECK-IN',h:'지금부터\nFlight YS0314\n탑승 수속을 시작하겠습니다',p:'기장 유창 · 부기장 수지'},
+  {t:'ann',ph:0,ic:'bell',lbl:'CHECK-IN',h:'지금부터\nFlight YS0314\n탑승 수속을 시작하겠습니다',p:TO?`${TO}, 환영합니다\n기장 유창 · 부기장 수지`:'기장 유창 · 부기장 수지'},
   {t:'photo',ph:0,lbl:'DEPARTURE',h:'2027.03.14',p:'일요일 오후 2시 30분\n저희 두 사람의 첫 비행이 이륙합니다'},
   {t:'ann',ph:1,ic:'bag',lbl:'SECURITY CHECK',h:'보안 검색대입니다\n소지품 검사를\n진행하겠습니다',p:'설렘 1개, 축하하는 마음 1개 확인…\n통과입니다 ✓'},
   {t:'photo',ph:1,lbl:'GATE',h:'루이비스컨벤션\n안양점',ko:true,p:'안양역 2층 맞이방과 바로 연결돼요\n엔터식스 안양점 8·9층'},
   {t:'ann',ph:2,ic:'scan',lbl:'FINAL CHECK',h:'마지막으로\n소지품을 한 번 더\n확인하겠습니다',p:'환한 웃음, 힘찬 박수, 따뜻한 축복\n모두 챙기셨나요?'},
   {t:'photo',ph:2,lbl:'THANK YOU',h:'저희의 첫 비행에\n탑승해 주셔서 감사합니다',ko:true,p:'난기류 없는 하늘은 없겠지만\n서로의 안전벨트가 되어\n평생 나란히 날아가겠습니다.\n그 첫 이륙을 곁에서 지켜봐 주세요.'},
-  {t:'ann',ph:2,ic:'ticket',lbl:'BOARDING',h:'티켓 검사를 하겠습니다',p:'탑승권을 준비해 주세요',last:true}
+  {t:'ann',ph:2,ic:'ticket',lbl:'BOARDING',h:TO?`${TO}의\n티켓 검사를 하겠습니다`:'티켓 검사를 하겠습니다',p:'탑승권을 준비해 주세요',last:true}
 ];
 const $=id=>document.getElementById(id);
 const intro=$('intro'),track=$('track'),dots=$('idots');

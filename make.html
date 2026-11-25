@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>탑승권 링크 만들기</title>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: 신랑신부 전용 도구, 간단하고 빠르게
+IDEA: 이름 목록을 붙여넣으면 사람별 링크가 줄줄이 나오는 발송 리스트
+PICTURE: 이름별 링크 카드 + 복사 버튼
+COLOUR and TYPE: 청첩장과 같은 핑크·화이트 / 개구 + 노토산스
+LAYOUT: 480px 한 컬럼, 입력 → 결과 목록
+*/
+:root{color-scheme:light;--pink:#d8c69c;--rose:#a8864c;--deep:#0f3d30;--ink:#13261f;--sub:#7b8079;--blush:#f3eee2}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(120% 70% at 50% 0%,#17543f,#0f3d30 45%,#0a2c22) fixed;color:var(--ink);font:15px/1.6 "Noto Sans KR",sans-serif}
+main{max-width:480px;margin:0 auto;padding:32px 18px 60px}
+h1{font:700 30px/1.2 "Gaegu",cursive;color:#d6b97f;margin:0 0 6px}
+.lead{margin:0 0 20px;color:#f3e7cc;font-size:14px}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.15);margin-bottom:14px}
+label{display:block;font-weight:500;font-size:14px;margin:0 0 6px}
+textarea,input[type=text]{width:100%;font:16px "Noto Sans KR";color:var(--ink);background:var(--blush);border:1px solid transparent;border-radius:12px;padding:10px 14px}
+textarea{height:120px;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--rose);background:#fff}
+.hint{font-size:12px;color:var(--sub);margin:6px 0 0}
+.chk{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;min-height:44px}
+.chk input{width:20px;height:20px;accent-color:var(--rose)}
+.btn{min-height:44px;padding:0 18px;border:0;border-radius:22px;background:#0f3d30;color:#f3e7cc;font:500 14px "Noto Sans KR";cursor:pointer;flex:none}
+.btn.line{background:#fff;color:var(--deep);box-shadow:inset 0 0 0 1.5px var(--pink)}
+.btn:focus-visible{outline:2px solid var(--deep);outline-offset:2px}
+.list{list-style:none;margin:0;padding:0}
+.list li{background:#fff;border-radius:14px;padding:14px 16px;margin-top:10px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.list b{color:var(--deep);font-size:16px}
+.list code{display:block;font-size:12px;color:var(--sub);overflow-wrap:anywhere;margin:4px 0 10px}
+.list div{display:flex;gap:8px;flex-wrap:wrap}
+.list .btn{min-height:38px;font-size:12px;padding:0 14px}
+.top{color:#f3e7cc;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--deep);color:#fff;padding:10px 20px;border-radius:22px;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<main>
+  <h1>탑승권 링크 만들기 ✈️</h1>
+  <p class="lead">이름을 적으면 탑승객 칸에 그분 이름이 찍힌 탑승권 링크가 만들어져요. 이 페이지는 두 분만 쓰세요.</p>
+
+  <div class="card">
+    <label for="names">초대할 분 이름 (한 줄에 한 명)</label>
+    <textarea id="names" placeholder="김민지&#10;박서준&#10;이모"></textarea>
+    <label class="chk"><input type="checkbox" id="nim" checked> 이름 뒤에 '님' 자동으로 붙이기</label>
+    <p class="hint">'이모', '삼촌'처럼 호칭으로 부를 분은 '님'을 빼고 따로 만들어 주세요.</p>
+    <label for="base" style="margin-top:14px">청첩장 주소</label>
+    <input type="text" id="base" inputmode="url">
+    <p class="hint">GitHub Pages 주소가 자동으로 채워져요. 다르면 직접 고쳐 주세요.</p>
+    <label for="msg" style="margin-top:14px">함께 보낼 문구</label>
+    <textarea id="msg" style="height:90px">{이름}, 유창 ♥ 수지의 첫 비행 YS0314에 초대합니다 ✈️
+3월 14일(일) 오후 2시 30분, 안양 루이비스컨벤션에서 탑승권 확인할게요!</textarea>
+    <p class="hint">{이름} 자리에 그분 이름이 들어가요.</p>
+  </div>
+
+  <div class="top" id="top" hidden><b id="cnt"></b><button class="btn line" id="copyAll">전체 목록 복사</button></div>
+  <ul class="list" id="list"></ul>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const toast=t=>{const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1600)};
+const copy=async t=>{try{await navigator.clipboard.writeText(t);toast('복사되었습니다')}catch(e){toast('복사가 막혀 있어요. 길게 눌러 복사해 주세요')}};
+$('base').value=location.href.split(/[?#]/)[0].replace(/make\.html$/,'');
+let rows=[];
+const build=()=>{
+  const nim=$('nim').checked,base=$('base').value.trim();
+  rows=$('names').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,300).map(n=>{
+    const to=nim&&!/님$/.test(n)?n+'님':n;
+    const url=base+(base.includes('?')?'&':'?')+'to='+encodeURIComponent(to);
+    return{to,url,text:$('msg').value.split('{이름}').join(to)+'\n'+url};
+  });
+  const ul=$('list');ul.replaceChildren();
+  rows.forEach((r,i)=>{
+    const li=document.createElement('li'),b=document.createElement('b'),c=document.createElement('code'),d=document.createElement('div');
+    b.textContent=r.to;c.textContent=r.url;
+    const b1=document.createElement('button');b1.className='btn';b1.textContent='문구+링크 복사';b1.onclick=()=>copy(r.text);
+    const b2=document.createElement('button');b2.className='btn line';b2.textContent='링크만 복사';b2.onclick=()=>copy(r.url);
+    const a=document.createElement('a');a.className='btn line';a.textContent='미리보기';a.href=r.url;a.target='_blank';a.rel='noopener';a.style.cssText='display:inline-flex;align-items:center;text-decoration:none';
+    d.append(b1,b2,a);li.append(b,c,d);ul.append(li);
+  });
+  $('top').hidden=!rows.length;$('cnt').textContent=`${rows.length}명`;
+};
+['names','nim','base','msg'].forEach(id=>$(id).addEventListener('input',build));
+$('copyAll').onclick=()=>copy(rows.map(r=>`${r.to}\t${r.url}`).join('\n'));
+}
+</script>
+</body>
+</html>
